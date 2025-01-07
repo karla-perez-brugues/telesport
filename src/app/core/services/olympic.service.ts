@@ -29,4 +29,23 @@ export class OlympicService {
   getOlympics() {
     return this.olympics$.asObservable();
   }
+
+  getMedalsPerCountry(): [] {
+      let medals: any = [];
+
+      this.olympics$.subscribe((olympics) => {
+          olympics?.forEach((olympic) => {
+              let medalsCount = 0;
+              let country = olympic.country;
+
+              olympic.participations.forEach((participation) => {
+                  medalsCount += participation.medalsCount;
+              });
+
+              medals.push({'country': country, 'medalsCount': medalsCount});
+          });
+      })
+
+      return medals;
+  }
 }

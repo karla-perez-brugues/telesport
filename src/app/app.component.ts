@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs';
 import { OlympicService } from './core/services/olympic.service';
+import { Chart, registerables } from "chart.js";
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-root',
