@@ -1,0 +1,31 @@
+<div class="container mx-auto my-20">
+    <div class="card card-compact bg-primary text-primary-content mx-auto">
+        <div class="card-body items-center">
+            <h1 class="card-title">
+                Medals per Country
+            </h1>
+        </div>
+    </div>
+
+    <div class="flex justify-center flex-col md:flex-row">
+        <div class="card card-compact border border-accent m-5">
+            <div class="card-body text-center items-center">
+                <h3 class="card-title">Number of Games</h3>
+                <p>{{ numberOfGames | async  }}</p>
+            </div>
+        </div>
+
+        <div class="card card-compact border border-accent m-5">
+            <div class="card-body text-center items-center">
+                <h3 class="card-title">Number of Countries</h3>
+                <p>{{ numberOfCountries | async  }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container flex justify-center">
+        <span>
+            <canvas id="MyChart" class="w-96" (click) = "onChartClick($event)">{{ chart }}</canvas>
+        </span>
+    </div>
+</div>
