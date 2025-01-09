@@ -1,43 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { OlympicService } from 'src/app/core/services/olympic.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
+import {OlympicService} from 'src/app/core/services/olympic.service';
 import {Olympic} from "../../core/models/Olympic";
-import {Chart} from "chart.js";
+import {Chart, ChartConfiguration} from "chart.js";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-  public olympics$: Observable<Olympic[]|null> = of(null);
-  public medals!: { country: string; medalsCount: number }[];
-
+export class HomeComponent implements OnInit, OnDestroy {
+  public olympics$!: Observable<Olympic[]|null>;
   public chart!: Chart;
+
+  private config!: ChartConfiguration;
+  private medalsPerCountry$!: Subscription;
 
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
-    this.medals = this.olympicService.getMedalsPerCountry();
+    this.initChart();
+  }
 
-    let countries = this.medals.map(({country}) => country);
-    let medalsCount = this.medals.map(({medalsCount}) => medalsCount);
+  ngOnDestroy() {
+    this.medalsPerCountry$.unsubscribe();
+  }
 
-    let data: any = {
-      labels: ['France', 'Espagne', 'Allemagne'], // FIXME: use real data
-      datasets: [{
-        label: 'Medals per country',
-        data: [456, 865, 168], // FIXME: use real data
-        hoverOffset: 4
-      }]
-    };
-
-    let config: any = {
+  initChart() {
+    this.config = {
       type: 'pie',
-      data: data,
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Medals per country',
+          data: [],
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        plugins: {
+          colors: {
+            forceOverride: true
+          }
+        }
+      }
     };
 
-    this.chart = new Chart('MyChart', config);
+    this.chart = new Chart('MyChart', this.config);
+    this.updateChart();
+  }
+
+  private updateChart() {
+    this.medalsPerCountry$ = this.olympicService.getOlympics().subscribe(
+      olympics => {
+        olympics?.forEach((olympic) => {
+          let medalsCount: number = 0;
+
+          olympic.participations.forEach((participation) => {
+            medalsCount += participation.medalsCount;
+          });
+
+          this.config.data.labels?.push(olympic.country);
+          this.config.data.datasets[0].data.push(medalsCount);
+
+          this.chart.update();
+        });
+      }
+    );
   }
 }
