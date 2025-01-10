@@ -35,7 +35,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.olympicsByCountry$!.unsubscribe();
+        this.olympicsByCountry$.unsubscribe();
     }
 
     private loadDetails() {

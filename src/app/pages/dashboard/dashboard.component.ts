@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (res.length > 0) {
       // @ts-ignore FIXME : remove this
       let countryName: string = this.chart.data.labels[res[0].index];
-      this.router.navigateByUrl(`${countryName}/details`);
+      this.router.navigateByUrl(`details/${countryName}`);
     }
   }
 
