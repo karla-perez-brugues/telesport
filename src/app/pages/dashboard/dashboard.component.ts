@@ -3,6 +3,7 @@ import {AsyncPipe} from "@angular/common";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {OlympicService} from "../../core/services/olympic.service";
 import {Chart, ChartConfiguration} from "chart.js";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +22,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private config!: ChartConfiguration;
   private data$!: Subscription;
 
-  constructor(private olympicService: OlympicService) {}
+  constructor(
+      private olympicService: OlympicService,
+      private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -35,7 +39,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const res = this.chart.getElementsAtEventForMode(event, 'nearest', {intersect: true}, true);
     if (res.length > 0) {
       // @ts-ignore FIXME : remove this
-      let countryName = this.chart.data.labels[res[0].index];
+      let countryName: string = this.chart.data.labels[res[0].index];
+      this.router.navigateByUrl(`${countryName}/details`);
     }
   }
 
