@@ -3,6 +3,8 @@ import {AsyncPipe} from "@angular/common";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {OlympicService} from "../../core/services/olympic.service";
 import {Chart, ChartConfiguration} from "chart.js";
+import {Router} from '@angular/router';
+import {ChartService} from "../../core/services/chart.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +23,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private config!: ChartConfiguration;
   private data$!: Subscription;
 
-  constructor(private olympicService: OlympicService) {}
+  constructor(
+      private olympicService: OlympicService,
+      private router: Router,
+      private chartService: ChartService,
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -34,8 +40,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onChartClick(event: any) {
     const res = this.chart.getElementsAtEventForMode(event, 'nearest', {intersect: true}, true);
     if (res.length > 0) {
-      // @ts-ignore FIXME : remove this
-      let countryName = this.chart.data.labels[res[0].index];
+      // @ts-ignore
+      let countryName: string = this.chart.data.labels[res[0].index];
+      this.router.navigateByUrl(`details/${countryName}`);
     }
   }
 
@@ -72,25 +79,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private initChart() {
-    this.config = {
-      type: 'pie',
-      data: {
-        labels: [],
-        datasets: [{
-          label: 'Medals per country',
-          data: [],
-          hoverOffset: 4
-        }]
-      },
-      options: {
-        plugins: {
-          colors: {
-            forceOverride: true
-          }
-        }
-      }
-    };
-
-    this.chart = new Chart('MyChart', this.config);
+    this.config = this.chartService.configChart('pie', 'Medals per country');
+    this.chart = new Chart('DashboardChart', this.config);
   }
 }
