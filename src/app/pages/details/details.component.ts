@@ -6,6 +6,7 @@ import {Olympic} from "../../core/models/Olympic";
 import {AsyncPipe, NgClass} from "@angular/common";
 import {Participation} from "../../core/models/Participation";
 import {Chart, ChartConfiguration} from "chart.js";
+import {ChartService} from "../../core/services/chart.service";
 
 @Component({
   selector: 'app-details',
@@ -30,6 +31,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private olympicService: OlympicService,
+        private chartService: ChartService,
     ) {}
 
     ngOnInit() {
@@ -77,25 +79,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
 
     private initChart() {
-        this.config = {
-            type: 'line',
-            data: {
-                labels: [], // years
-                datasets: [{
-                    label: 'Medals per participation',
-                    data: [], // nb of medals
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                plugins: {
-                    colors: {
-                        forceOverride: true
-                    }
-                }
-            }
-        };
-
-        this.chart = new Chart('MyChart', this.config);
+        this.config = this.chartService.configChart('line', 'Medals per participation');
+        this.chart = new Chart('DetailsChart', this.config);
     }
 }
