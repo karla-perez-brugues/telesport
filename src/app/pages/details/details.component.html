@@ -1,36 +1,47 @@
 <div class="container mx-auto p-5">
-    <div class="card card-compact bg-accent text-accent-content m-5">
-        <div class="card-body items-center">
-            <h1 class="card-title">{{ (olympic | async)?.country }}</h1>
+    @if (error) {
+        <div role="alert" class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current hidden md:block" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ error }}</span>
         </div>
-    </div>
+    }
 
-    <div class="flex justify-center flex-col md:flex-row">
-        <div class="card card-compact border border-accent m-5">
-            <div class="card-body text-center items-center">
-                <h3 class="card-title">Number of Entries</h3>
-                <p>{{ (olympic | async)?.participations?.length  }}</p>
+    <div [ngClass]="error ? 'hidden' : ''">
+        <div class="card card-compact bg-accent text-accent-content m-5">
+            <div class="card-body items-center">
+                <h1 class="card-title">{{ (olympic | async)?.country }}</h1>
             </div>
         </div>
 
-        <div class="card card-compact border border-accent m-5">
-            <div class="card-body text-center items-center">
-                <h3 class="card-title">Total number of medals</h3>
-                <p>{{ numberOfMedals | async  }}</p>
+        <div class="flex justify-center flex-col md:flex-row">
+            <div class="card card-compact border border-accent m-5">
+                <div class="card-body text-center items-center">
+                    <h3 class="card-title">Number of Entries</h3>
+                    <p>{{ (olympic | async)?.participations?.length  }}</p>
+                </div>
+            </div>
+
+            <div class="card card-compact border border-accent m-5">
+                <div class="card-body text-center items-center">
+                    <h3 class="card-title">Total number of medals</h3>
+                    <p>{{ numberOfMedals | async  }}</p>
+                </div>
+            </div>
+
+            <div class="card card-compact border border-accent m-5">
+                <div class="card-body text-center items-center">
+                    <h3 class="card-title">Total number of athletes</h3>
+                    <p>{{ numberOfAthletes | async  }}</p>
+                </div>
             </div>
         </div>
 
-        <div class="card card-compact border border-accent m-5">
-            <div class="card-body text-center items-center">
-                <h3 class="card-title">Total number of athletes</h3>
-                <p>{{ numberOfAthletes | async  }}</p>
-            </div>
+        <div class="chart-container flex justify-center">
+            <span>
+                <canvas id="MyChart" class="w-96">{{ chart }}</canvas>
+            </span>
         </div>
-    </div>
-
-    <div class="chart-container flex justify-center">
-        <span>
-            <canvas id="MyChart" class="w-96">{{ chart }}</canvas>
-        </span>
     </div>
 </div>
