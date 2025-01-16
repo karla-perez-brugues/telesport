@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {OlympicService} from "../../core/services/olympic.service";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {Olympic} from "../../core/models/Olympic";
@@ -32,6 +32,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private olympicService: OlympicService,
         private chartService: ChartService,
+        private router: Router,
     ) {}
 
     ngOnInit() {
@@ -48,13 +49,20 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
         this.olympicsByCountry$ = this.olympicService.getOlympicsByCountry(olympicCountry).subscribe(
             olympics => {
+
               if (olympics) {
                 this.olympic = new BehaviorSubject(olympics[0]);
-                if (this.olympic.value === undefined) {
-                    this.error = `Could not load olympics for ${olympicCountry}.`;
-                } else {
-                    this.error = null;
-                }
+                // this.olympic.subscribe((value) => {
+                //     if (value === undefined) {
+                //         this.router.navigateByUrl('/not-found');
+                //     }
+                // })
+                // if (this.olympic.value === undefined) {
+                //      this.error = `Could not load olympics for ${olympicCountry}.`;
+                //     // this.router.navigateByUrl('/not-found');
+                // } else {
+                //     this.error = null;
+                // }
               }
 
               olympics?.forEach((olympic: Olympic) => {
@@ -74,6 +82,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
                   this.numberOfMedals.next(numberOfMedals);
                   this.numberOfAthletes.next(numberOfAthletes);
               });
+            }, error => {
+                this.router.navigateByUrl('/not-found');
             }
         );
     }

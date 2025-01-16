@@ -31,8 +31,21 @@ export class OlympicService {
     }
 
     getOlympicsByCountry(country: string): Observable<Olympic[]|undefined> {
+         console.log(country);
+        // console.log(this.olympics$);
         return this.getOlympics().pipe(
-            map(olympics => olympics?.filter(olympic => olympic.country === country)),
+            map(olympics => {
+                const o = olympics?.filter(olympic => olympic.country === country);
+                // console.log(olympics);
+                if (o?.length === 0) {
+                    //throw new Error('Country not found');
+                }
+                return o;
+            })
+        ).pipe(
+            tap((o) => {
+                console.log(o);
+            })
         );
     }
 }
