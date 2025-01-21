@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {OlympicService} from "../../core/services/olympic.service";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {Olympic} from "../../core/models/Olympic";
-import {AsyncPipe, NgClass} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {Participation} from "../../core/models/Participation";
 import {Chart, ChartConfiguration} from "chart.js";
 import {ChartService} from "../../core/services/chart.service";
@@ -12,8 +12,7 @@ import {ChartService} from "../../core/services/chart.service";
   selector: 'app-details',
   standalone: true,
     imports: [
-        AsyncPipe,
-        NgClass
+        AsyncPipe
     ],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss'
@@ -23,7 +22,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
     public numberOfMedals = new BehaviorSubject<number>(0);
     public numberOfAthletes = new BehaviorSubject<number>(0);
     public chart!: Chart;
-    public error!: string | null ;
 
     private olympicsByCountry$!: Subscription;
     private config!: ChartConfiguration;
@@ -48,13 +46,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
         this.olympicsByCountry$ = this.olympicService.getOlympicsByCountry(olympicCountry).subscribe(
             olympics => {
+
               if (olympics) {
                 this.olympic = new BehaviorSubject(olympics[0]);
-                if (this.olympic.value === undefined) {
-                    this.error = `Could not load olympics for ${olympicCountry}.`;
-                } else {
-                    this.error = null;
-                }
               }
 
               olympics?.forEach((olympic: Olympic) => {
