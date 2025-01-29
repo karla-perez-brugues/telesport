@@ -17,8 +17,8 @@ import {ChartService} from "../../core/services/chart.service";
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   public chart!: Chart;
-  public numberOfGames = new BehaviorSubject<number>(0);
-  public numberOfCountries = new BehaviorSubject<number>(0);
+  public numberOfGames$ = new BehaviorSubject<number>(0);
+  public numberOfCountries$ = new BehaviorSubject<number>(0);
 
   private config!: ChartConfiguration;
   private data$!: Subscription;
@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (olympics) {
             let uniqueYears: number[] = [];
 
-            this.numberOfCountries.next(olympics.length);
+            this.numberOfCountries$.next(olympics.length);
 
             olympics.forEach((olympic) => {
               let medalsCount: number = 0;
@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               this.chart.update();
             });
 
-            this.numberOfGames.next(uniqueYears.length);
+            this.numberOfGames$.next(uniqueYears.length);
           }
         }
     );
