@@ -1,7 +1,7 @@
 <div class="container mx-auto p-5">
     <div class="card card-compact bg-accent text-accent-content m-5">
         <div class="card-body items-center">
-            <h1 class="card-title">{{ (olympic | async)?.country }}</h1>
+            <h1 class="card-title">{{ (olympic$ | async)?.country }}</h1>
         </div>
     </div>
 
@@ -9,21 +9,21 @@
         <div class="card card-compact border border-accent m-5">
             <div class="card-body text-center items-center">
                 <h3 class="card-title">Number of Entries</h3>
-                <p>{{ (olympic | async)?.participations?.length  }}</p>
+                <p>{{ (olympic$ | async)?.participations?.length  }}</p>
             </div>
         </div>
 
         <div class="card card-compact border border-accent m-5">
             <div class="card-body text-center items-center">
                 <h3 class="card-title">Total number of medals</h3>
-                <p>{{ numberOfMedals | async  }}</p>
+                <p>{{ numberOfMedals$ | async  }}</p>
             </div>
         </div>
 
         <div class="card card-compact border border-accent m-5">
             <div class="card-body text-center items-center">
                 <h3 class="card-title">Total number of athletes</h3>
-                <p>{{ numberOfAthletes | async  }}</p>
+                <p>{{ numberOfAthletes$ | async  }}</p>
             </div>
         </div>
     </div>

@@ -18,9 +18,9 @@ import {ChartService} from "../../core/services/chart.service";
   styleUrl: './details.component.scss'
 })
 export class DetailsComponent implements OnInit, OnDestroy {
-    public olympic!: BehaviorSubject<Olympic>;
-    public numberOfMedals = new BehaviorSubject<number>(0);
-    public numberOfAthletes = new BehaviorSubject<number>(0);
+    public olympic$!: BehaviorSubject<Olympic>;
+    public numberOfMedals$ = new BehaviorSubject<number>(0);
+    public numberOfAthletes$ = new BehaviorSubject<number>(0);
     public chart!: Chart;
 
     private olympicsByCountry$!: Subscription;
@@ -48,7 +48,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             olympics => {
 
               if (olympics) {
-                this.olympic = new BehaviorSubject(olympics[0]);
+                this.olympic$ = new BehaviorSubject(olympics[0]);
               }
 
               olympics?.forEach((olympic: Olympic) => {
@@ -65,8 +65,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
                       this.chart.update();
                   });
 
-                  this.numberOfMedals.next(numberOfMedals);
-                  this.numberOfAthletes.next(numberOfAthletes);
+                  this.numberOfMedals$.next(numberOfMedals);
+                  this.numberOfAthletes$.next(numberOfAthletes);
               });
             }
         );
